@@ -134,10 +134,10 @@ function searchRiderPick(req,res){
             return res.status(200).json({message: "error in getting pick  add"});
         }
         if(!result){
-            return res.status(200).json(result);
+            return res.status(200).json({message:"No data found for given criteria"});
         }
         else{
-            return res.status(200).json({message:"No data found for given criteria"});
+            return res.status(200).json(result);
         }
 
     });
@@ -168,7 +168,7 @@ function searchPickTime(req,res){
         if(err){
             return res.status(200).json({message: "error in getting drop add"});
         }
-        if(!result){
+        if(result==0){
             return res.status(200).json({message:"No data found for given criteria"});
         }
         else{
@@ -183,7 +183,7 @@ function searchDropTime(req,res){
         if(err){
             return res.status(200).json({message: "error in getting drop add"});
         }
-        if(!result){
+        if(result==0){
             return res.status(200).json({message:"No data found for given criteria"});
         }
         else{
