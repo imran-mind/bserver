@@ -1,8 +1,4 @@
-/*
- * @author devendra.rathore@47billion.com
- * The file contains authentication utils and middlewares to
- * ensure whether the user is authenticated or not.
- * */
+
 
 require('rootpath')();
 var config = require('config'),
