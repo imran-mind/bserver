@@ -25,7 +25,7 @@ function addPickDrop(req, res) {
 
     var input = req.body;
     var payload = {
-        id: idGenerator.getNextRiderId(),
+        id: idGenerator.getNextId(),
         name: input.name,
         phone: input.phone,
         fromAdd: input.fromAdd,

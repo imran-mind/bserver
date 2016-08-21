@@ -1,7 +1,5 @@
 'use strict';
-/**
- * @author devendra.rathore@47billion.com
- */
+
 
 require('rootpath')();
 var fs = require("fs"),

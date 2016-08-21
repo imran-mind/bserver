@@ -41,7 +41,7 @@ module.exports = function (app) {
             }
         })
         .all('/api/v1/*', [])
-        .use(express.static(path.join(__dirname, '/../../../dashboard')))
+        .use(express.static(path.join(__dirname, '/../../../')))
         .use(require('morgan')('combined', {"stream": logger.stream}))
         .use(bodyParser.json({limit: '5mb'}))
 
