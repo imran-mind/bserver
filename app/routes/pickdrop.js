@@ -133,7 +133,7 @@ function searchRiderPick(req,res){
         if(err){
             return res.status(200).json({message: "error in getting pick  add"});
         }
-        if(!result){
+        if(result==0){
             return res.status(200).json({message:"No data found for given criteria"});
         }
         else{
@@ -151,7 +151,7 @@ function searchRiderDrop(req,res){
         if(err){
             return res.status(200).json({message: "error in getting drop add"});
         }
-        if(!result){
+        if(result==0){
             return res.status(200).json({message:"No data found for given criteria"});
         }
         else{
