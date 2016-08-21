@@ -1,5 +1,24 @@
 
-create table signup(id TEXT ,name TEXT, phone TEXT, email TEXT);
+project section
+root@ubuntu-512mb-nyc3-01:/usr/share/nginx/html/bhrum#
+=======================
+
+ngnix server section
+root@ubuntu-512mb-nyc3-01:/etc/ngnix/sites-available/ > sudo vim default
+=====================================================================
+fuser -n tcp -k 9001
+
+process to install and run postgres
+1) sudo apt-get update
+2) sudo apt-get install postgresql postgresql-contrib
+3)sudo -i -u postgres
+3) psql
+4) \l ==> to see database
+
+create database databasename
+
+create table signup(id TEXT ,name TEXT, phone TEXT, email TEXT,created_at bigint,updated_at bigint);
 
 create table pickdrop(id TEXT ,name TEXT, phone TEXT, from_add TEXT,to_add TEXT,
 from_time TEXT,to_time TEXT,id_everyday boolean,created_at bigint ,updated_at bigint );
+
