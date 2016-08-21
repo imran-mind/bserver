@@ -1,0 +1,15 @@
+{
+  "name": "GoTukTuk",
+  "version": "1.0.0",
+  "description": "APIs exposed to the external world!",
+  "title": "GoTukTuk APIs",
+  "url" : "http://52.89.31.187:8080/api/",
+  "order": [
+    "GetUser",
+    "PostUser"
+  ],
+  "template": {
+  	"withCompare": true,
+  	"withGenerator": true
+  }
+}

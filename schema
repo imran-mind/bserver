@@ -1,0 +1,5 @@
+
+create table signup(id TEXT ,name TEXT, phone TEXT, email TEXT);
+
+create table pickdrop(id TEXT ,name TEXT, phone TEXT, from_add TEXT,to_add TEXT,
+from_time TEXT,to_time TEXT,id_everyday boolean,created_at bigint ,updated_at bigint );

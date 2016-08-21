@@ -1,0 +1,28 @@
+{
+  "app": {
+    "host": "0.0.0.0",
+    "port": "8080"
+  },
+  "db": {
+    "host": "localhost",
+    "database": "bhrum",
+    "dialect": "postgres",
+    "username": "postgres",
+    "password": "postgres",
+    "minPoolSize": 0,
+    "maxPoolSize": 5,
+    "idleConnectionTimeout": 100000
+  },
+
+  "logger": {
+    "level": "info",
+    "filename": "server.log"
+  },
+  "token": {
+    "secret": "<=-dev-=>",
+    "expiry": 360000
+  },
+  "search": {
+    "defaultRadius": 2000
+  }
+}
