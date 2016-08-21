@@ -1,6 +1,4 @@
-/**
- * @author - devendra.rathore@47billion.com
- * */
+
 var Sequelize = require("sequelize"),
     log = require('app/utils/logger')(module),
     config = require('config').db;

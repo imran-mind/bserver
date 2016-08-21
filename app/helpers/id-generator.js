@@ -1,7 +1,4 @@
 'use strict'
-/** A unique id generator, Writing this module separately so as to
- * change the unique id generation logic at any time.
- */
 
 var shortId = require('shortid');
 

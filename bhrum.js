@@ -1,9 +1,5 @@
 'use strict'; // Always keep it strict!
-/**
- * @author devendra.rathore@47billion.com
- * The entry point for the gateway server. Invokes the app module to initialize the
- * api endpoints(routes).
- */
+
 
 //To refer different modules irrespective of where we are.
 require('rootpath')();

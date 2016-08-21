@@ -1,7 +1,3 @@
-/**
- * @author: Imran Shaikh
- * @email: shaikhimran115@gmail.com
- */
 
 
 module.exports = function (sequelize, DataTypes) {

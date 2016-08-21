@@ -1,8 +1,5 @@
 'use strict'
-/*
- * @author devendra.rathore@47billion.com
- * The file contains all the endpoints existing into the system.
- * */
+
 
 var express = require('express'),
     path = require('path'),

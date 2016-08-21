@@ -1,10 +1,4 @@
-/**
- * Created by imran on 21/8/16.
- */
-/**
- * @author: Imran Shaikh
- * @email: shaikhimran115@gmail.com
- */
+
 var log = require('app/utils/logger')(module);
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('pickdrop', {

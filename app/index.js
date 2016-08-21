@@ -1,9 +1,5 @@
 'use strict';
-/**
- * @author devendra@47billion.com
- * The module starts the http server on specified host and port. It invokes the
- * configuration for different routes and does basic error handling.
- */
+
 
 var express = require('express'),
     log = require('app/utils/logger')(module),

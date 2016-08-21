@@ -1,6 +1,4 @@
-/**
- * Created by imran on 16/8/16.
- */
+
 var config = require('config'),
     log = require('app/utils/logger')(module),
     moment = require('moment'),
