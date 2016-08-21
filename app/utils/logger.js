@@ -1,6 +1,4 @@
-/**
- * @author devendra.rathore@47billion.com
- */
+
 'use strict';
 
 var config = require('config'),
