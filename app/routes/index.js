@@ -10,17 +10,17 @@ var express = require('express'),
     pickdrop = require('app/routes/pickdrop');
 
 
-
 router.post('/api/v1/signup', signup.doSignup);
-router.post('/api/v1/pdadd',pickdrop.addPickDrop);
-router.get('/api/v1/pdadd',pickdrop.getPickDrop);
-router.get('/api/v1/pdadd/:id',pickdrop.getPickDropById);
-router.put('/api/v1/pdadd/:id',pickdrop.updatePickDrop);
-router.get('/api/v1/searchpick',pickdrop.searchRiderPick);
-router.get('/api/v1/searchdrop',pickdrop.searchRiderDrop);
-router.get('/api/v1/searchpt',pickdrop.searchPickTime);
-router.get('/api/v1/searchdt',pickdrop.searchDropTime);
-
+router.post('/api/v1/login', signup.doLogin);
+router.patch('/api/v1/pdadd/:id', pickdrop.addPickDrop);
+router.get('/api/v1/pdadd', pickdrop.getPickDrop);
+router.get('/api/v1/pdadd/:id', pickdrop.getPickDropById);
+router.put('/api/v1/pdadd/:id', pickdrop.updatePickDrop);
+router.get('/api/v1/searchpick', pickdrop.searchRiderPick);
+router.get('/api/v1/searchdrop', pickdrop.searchRiderDrop);
+router.get('/api/v1/searchpt', pickdrop.searchPickTime);
+router.get('/api/v1/searchdt', pickdrop.searchDropTime);
+router.get('/api/v1/searchpickdrop', pickdrop.searchPickDrop);
 module.exports = function (app) {
     app
         .all('/*', function (req, res, next) {

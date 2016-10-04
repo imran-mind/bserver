@@ -1,75 +1,86 @@
-
-
 var config = require('config'),
     log = require('app/utils/logger')(module),
     moment = require('moment'),
     idGenerator = require('app/helpers/id-generator'),
     debug = require('debug')('app.routes.driver'),
     M = require('app/models'),
-    auth = require('app/helpers/auth');
+    auth = require('app/helpers/auth'),
+    async = require('async');
 
 var pickdrop = {
     addPickDrop: addPickDrop,
     getPickDrop: getPickDrop,
     getPickDropById: getPickDropById,
     updatePickDrop: updatePickDrop,
-    searchRiderPick:searchRiderPick,
-    searchRiderDrop:searchRiderDrop,
-    searchPickTime:searchPickTime,
-    searchDropTime:searchDropTime
+    searchRiderPick: searchRiderPick,
+    searchRiderDrop: searchRiderDrop,
+    searchPickTime: searchPickTime,
+    searchDropTime: searchDropTime,
+    searchPickDrop: searchPickDrop
 }
 
 function addPickDrop(req, res) {
 
     var input = req.body;
+    var id = req.params.id;
+    var condition = {
+        where: {
+            id: id
+        }
+    };
     var payload = {
-        id: idGenerator.getNextId(),
-        name: input.name,
-        phone: input.phone,
+        name:input.name,
         fromAdd: input.fromAdd,
         toAdd: input.toAdd,
         fromTime: input.fromTime,
         toTime: input.toTime,
-        isEveryday: input.isEveryday,
-        createdAt: moment().unix(),
-        updatedAt: moment().unix()
-    }
-    M.Pickdrop.build(payload).save()
-        .then(function (userSignup) {
-            log.info("==>pickdrop added!!")
-            return res.status(201).json({
-                message: "user registered successfully !!",
-                id: userSignup.id
-            });
+        isEveryday: input.isEveryday
+    };
+    M.Pickdrop.update(payload, condition)
+        .then(function (result) {
+            log.info("==>address added successfully!!");
+            res.status(200).json({message: "address added successfully !!"});
         }, function (err) {
-            log.error("==>Error in added pickdrop", err)
-            return res.status(200).json({message: "problme in in added pickdrop"});
+            log.error('error in dao delete driver', err);
+            res.status(500).json(err.message);
         });
 }
 
 function getPickDrop(req, res) {
-    var condition = {
-        where: {isEveryday: "true"},
-        attributes: ['id', 'name', 'phone', 'fromAdd', 'toAdd',
-            'fromTime', 'toTime', 'isEveryday']
-    };
+
+    var jsonUser = []
     M.Pickdrop
-        .findAll(condition)
-        .then(function (user) {
-            if (user != null) {
-                return res.status(200).json(user);
+        .findAll()
+        .then(function (users) {
+            if (users != null) {
+                async.map(users, function (user) {
+                    var userObje = {
+                        "id": user.id,
+                        "name": user.name ? user.name : "",
+                        "phone": user.phone ? user.phone : "",
+                        "email": user.email ? user.email : "",
+                        "imagePath": user.imagePath ? user.imagePath : "",
+                        "fromAdd": user.fromAdd ? user.fromAdd : "",
+                        "toAdd": user.toAdd ? user.toAdd : "",
+                        "fromTime": user.fromTime ? user.fromTime : "",
+                        "toTime": user.toTime ? user.toTime : "",
+                        "isEveryday": user.isEveryday ? user.isEveryday : ""
+                    }
+                    jsonUser.push(userObje)
+                });
+                return res.status(200).json(jsonUser);
             }
         }, function (error) {
             log.error("error in getting pickdrop data ", error.message);
-            return res.status(200).json({message: "error in getting pick and drop add "});
+            return res.status(200).json({message: "error in getting pick and drop add " + error.message});
         });
 }
 
 function getPickDropById(req, res) {
     var id = req.params.id;
     var condition = {
-        where: {id: id, isEveryday: "true"},
-        attributes: ['id', 'name', 'phone', 'fromAdd', 'toAdd',
+        where: {id: id},
+        attributes: ['id', 'name', 'phone', 'email', 'fromAdd', 'toAdd',
             'fromTime', 'toTime', 'isEveryday']
     };
     M.Pickdrop
@@ -91,9 +102,7 @@ function updatePickDrop(req, res) {
     var id = req.params.id;
     var input = req.body;
     var condition = {
-        where: {id: id, isEveryday: "true"},
-        attributes: ['id', 'name', 'phone', 'fromAdd', 'toAdd',
-            'fromTime', 'toTime', 'isEveryday']
+        where: {id: id}
     };
 
     var payload = {
@@ -127,16 +136,16 @@ function updatePickDrop(req, res) {
 }
 
 //http://localhost:8080/api/v1/searchadd?add=patni pura
-function searchRiderPick(req,res){
+function searchRiderPick(req, res) {
     var searchCriteria = req.query.pick;
-    M.Pickdrop.searchAddForDrop(searchCriteria,function(err,result){
-        if(err){
+    M.Pickdrop.searchAddForPick(searchCriteria, function (err, result) {
+        if (err) {
             return res.status(200).json({message: "error in getting pick  add"});
         }
-        if(result==0){
-            return res.status(200).json({message:"No data found for given criteria"});
+        if (result == 0) {
+            return res.status(200).json({message: "No data found for given criteria"});
         }
-        else{
+        else {
             return res.status(200).json(result);
         }
 
@@ -145,16 +154,16 @@ function searchRiderPick(req,res){
 }
 
 
-function searchRiderDrop(req,res){
+function searchRiderDrop(req, res) {
     var searchCriteria = req.query.drop;
-    M.Pickdrop.searchAddForDrop(searchCriteria,function(err,result){
-        if(err){
+    M.Pickdrop.searchAddForDrop(searchCriteria, function (err, result) {
+        if (err) {
             return res.status(200).json({message: "error in getting drop add"});
         }
-        if(result==0){
-            return res.status(200).json({message:"No data found for given criteria"});
+        if (result == 0) {
+            return res.status(200).json({message: "No data found for given criteria"});
         }
-        else{
+        else {
             return res.status(200).json(result);
         }
     });
@@ -162,34 +171,82 @@ function searchRiderDrop(req,res){
 }
 
 
-function searchPickTime(req,res){
+function searchPickTime(req, res) {
     var searchCriteria = req.query.ptime;
-    M.Pickdrop.searchTimeForPick(searchCriteria,function(err,result){
-        if(err){
+    M.Pickdrop.searchTimeForPick(searchCriteria, function (err, result) {
+        if (err) {
             return res.status(200).json({message: "error in getting drop add"});
         }
-        if(result==0){
-            return res.status(200).json({message:"No data found for given criteria"});
+        if (result == 0) {
+            return res.status(200).json({message: "No data found for given criteria"});
         }
-        else{
+        else {
             return res.status(200).json(result);
         }
     });
 }
 
-function searchDropTime(req,res){
+function searchDropTime(req, res) {
     var searchCriteria = req.query.dtime;
-    M.Pickdrop.searchTimeForDrop(searchCriteria,function(err,result){
-        if(err){
+    M.Pickdrop.searchTimeForDrop(searchCriteria, function (err, result) {
+        if (err) {
             return res.status(200).json({message: "error in getting drop add"});
         }
-        if(result==0){
-            return res.status(200).json({message:"No data found for given criteria"});
+        if (result == 0) {
+            return res.status(200).json({message: "No data found for given criteria"});
         }
-        else{
+        else {
             return res.status(200).json(result);
         }
     });
 }
 
+function searchPickDrop(req, res) {
+    var queryParam = req.query;
+    var pick = queryParam.pick ? queryParam.pick : "";
+    var drop = queryParam.drop ? queryParam.drop : "";
+    var jsonUser = [];
+    var condition = {
+        where: {
+            $and: [
+                {
+                    fromAdd: {
+                        $iLike: '%' + pick + '%'
+                    }
+                },
+                {
+                    toAdd: {
+                        $iLike: '%' + drop + '%'
+                    }
+                }
+            ]
+        }
+    };
+
+    M.Pickdrop
+        .findAll(condition)
+        .then(function (users) {
+            if (users != null) {
+                async.map(users, function (user) {
+                    var userObje = {
+                        "name": user.name ? user.name : "",
+                        "phone": user.phone ? user.phone : "",
+                        "email": user.email ? user.email : "",
+                        "imagePath": user.imagePath ? user.imagePath : "",
+                        "fromAdd": user.fromAdd ? user.fromAdd : "",
+                        "toAdd": user.toAdd ? user.toAdd : "",
+                        "fromTime": user.fromTime ? user.fromTime : "",
+                        "toTime": user.toTime ? user.toTime : "",
+                        "isEveryday": user.isEveryday ? user.isEveryday : ""
+                    }
+                    jsonUser.push(userObje);
+                });
+                return res.status(200).json(jsonUser);
+            }
+        }, function (error) {
+            log.error("error in searching pickdrop data ", error.message);
+            return res.status(500).json({message: "error in getting pick and drop add " + error.message});
+        });
+
+}
 module.exports = pickdrop;

@@ -17,6 +17,18 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
             unique: true
         },
+        email: {
+            type: DataTypes.TEXT,
+            field: 'email'
+        },
+        imagePath: {
+            type: DataTypes.TEXT,
+            field: 'image_path'
+        },
+        password: {
+            type: DataTypes.TEXT,
+            field: 'password'
+        },
         fromAdd: {
             type: DataTypes.TEXT,
             field: 'from_add'
@@ -35,7 +47,7 @@ module.exports = function (sequelize, DataTypes) {
         },
         isEveryday: {
             type: DataTypes.TEXT,
-            field: 'id_everyday'
+            field: 'is_everyday'
         },
         createdAt: {
             type: DataTypes.BIGINT,
