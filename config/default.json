@@ -13,7 +13,10 @@
     "maxPoolSize": 5,
     "idleConnectionTimeout": 100000
   },
-
+  "aws": {
+    "region": "us-west-2b",
+    "bucket": "imran-server"
+  },
   "logger": {
     "level": "info",
     "filename": "server.log"
