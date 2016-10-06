@@ -21,32 +21,48 @@ AWS.config.region = config.aws.region;
 
 var common = {
     generateQuery: generateQuery,
-    getBucketUrl: getBucketUrl
+    getBucketUrl: getBucketUrl,
+    mapOrderByFields: mapOrderByFields
 };
 
-
+function mapOrderByFields(order, type) {
+    switch (order) {
+        case 'pick':
+            return 'pick ' + type.toUpperCase();
+            break;
+        case 'drop':
+            return 'drop ' + type.toUpperCase();
+            break;
+        case 'ptime':
+            return 'ptime ' + type.toUpperCase();
+            break;
+        case 'dtime':
+            return 'dtime ' + type.toUpperCase();
+            break;
+    }
+}
 function generateQuery(object) {
     var query = {};
     async.map(Object.keys(object), function (field) {
         switch (field) {
-            case 'severity':
+            case 'pick':
                 if (object[field].trim() !== '') {
-                    query.severity = {$iLike: '%' + object[field].trim() + '%'};
+                    query.fromAdd = {$iLike: '%' + object[field].trim() + '%'};
                 }
                 break;
-            case 'category':
+            case 'drop':
                 if (object[field].trim() !== '') {
-                    query.category = {$iLike: '%' + object[field].trim() + '%'};
+                    query.toAdd = {$iLike: '%' + object[field].trim() + '%'};
                 }
                 break;
-            case 'acknowledged':
+            case 'ptime':
                 if (object[field].trim() !== '') {
-                    query.acknowledged = object[field].trim();
+                    query.fromTime = object[field].trim();
                 }
                 break;
-            case 'description':
+            case 'dtime':
                 if (object[field].trim() !== '') {
-                    query.description = {$iLike: '%' + object[field].trim() + '%'};
+                    query.toTime = {$iLike: '%' + object[field].trim() + '%'};
                 }
                 break;
         }

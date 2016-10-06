@@ -5,7 +5,9 @@ var config = require('config'),
     debug = require('debug')('app.routes.driver'),
     M = require('app/models'),
     auth = require('app/helpers/auth'),
-    async = require('async');
+    async = require('async'),
+    pickdropService = require('app/service/pickdrop'),
+    common = require('app/routes/common');
 
 var pickdrop = {
     addPickDrop: addPickDrop,
@@ -20,61 +22,43 @@ var pickdrop = {
 }
 
 function addPickDrop(req, res) {
-
     var input = req.body;
     var id = req.params.id;
-    var condition = {
-        where: {
-            id: id
+    pickdropService.addPickDrop(input, id, function (err, result) {
+        if (err) {
+            return res.status(500).json(err);
         }
-    };
-    var payload = {
-        name:input.name,
-        fromAdd: input.fromAdd,
-        toAdd: input.toAdd,
-        fromTime: input.fromTime,
-        toTime: input.toTime,
-        isEveryday: input.isEveryday
-    };
-    M.Pickdrop.update(payload, condition)
-        .then(function (result) {
-            log.info("==>address added successfully!!");
-            res.status(200).json({message: "address added successfully !!"});
-        }, function (err) {
-            log.error('error in dao delete driver', err);
-            res.status(500).json(err.message);
-        });
+        return res.status(200).json({message: result});
+    });
 }
 
 function getPickDrop(req, res) {
+    var queryParams = req.query;
+    var limit = queryParams.count ? queryParams.count : 15;
+    var offset = queryParams.start ? queryParams.start : 0;
 
-    var jsonUser = []
-    M.Pickdrop
-        .findAll()
-        .then(function (users) {
-            if (users != null) {
-                async.map(users, function (user) {
-                    var userObje = {
-                        "id": user.id,
-                        "name": user.name ? user.name : "",
-                        "phone": user.phone ? user.phone : "",
-                        "email": user.email ? user.email : "",
-                        "imagePath": user.imagePath ? user.imagePath : "",
-                        "fromAdd": user.fromAdd ? user.fromAdd : "",
-                        "toAdd": user.toAdd ? user.toAdd : "",
-                        "fromTime": user.fromTime ? user.fromTime : "",
-                        "toTime": user.toTime ? user.toTime : "",
-                        "isEveryday": user.isEveryday ? user.isEveryday : ""
-                    }
-                    jsonUser.push(userObje)
-                });
-                return res.status(200).json(jsonUser);
-            }
-        }, function (error) {
-            log.error("error in getting pickdrop data ", error.message);
-            return res.status(200).json({message: "error in getting pick and drop add " + error.message});
-        });
+    var orderByClause;
+    if ((queryParams || {}).order && (queryParams || {}).type) {
+        orderByClause = common.mapOrderByFields(queryParams.order.trim(),
+            queryParams.type.trim());
+    }
+    var searchTyp = queryParams.type ? queryParams.type : 'pick';
+    var data = queryParams.data ? queryParams.data : '';
+    var searchQuery = common.generateQuery(queryParams);
+    var condition = {
+        offset: offset,
+        limit: limit,
+        order: orderByClause,
+        where: searchQuery
+    };
+    pickdropService.getPickDrops(condition, function (err, result) {
+        if (err) {
+            return res.status(500).json(err);
+        }
+        return res.status(200).json({message: result});
+    });
 }
+
 
 function getPickDropById(req, res) {
     var id = req.params.id;
@@ -97,6 +81,7 @@ function getPickDropById(req, res) {
             return res.status(200).json({message: "error in getting pick and drop add "});
         });
 }
+
 
 function updatePickDrop(req, res) {
     var id = req.params.id;
@@ -200,6 +185,7 @@ function searchDropTime(req, res) {
         }
     });
 }
+
 
 function searchPickDrop(req, res) {
     var queryParam = req.query;

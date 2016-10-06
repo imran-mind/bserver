@@ -15,9 +15,7 @@ var signup = {
 function doSignup(req, res) {
     var input = req.body;
     log.info("==>invoking doSignup function");
-    var userId = idGenerator.getUserId();
     var payload = {
-        "id": userId,
         "name": input.name,
         "phone": input.phone,
         "email": input.email,
@@ -37,6 +35,7 @@ function doSignup(req, res) {
             if (user === null) {
                 M.Pickdrop.build(payload).save()
                     .then(function (userSignup) {
+                        var id = userSignup.id;
                         log.info("==>user registered !!")
                         /*var token = auth.createJWT(userSignup);*/
                         common.getBucketUrl(input.phone, function (err, url) {
@@ -52,7 +51,7 @@ function doSignup(req, res) {
                                     return res.status(201).json({
                                         status: 201,
                                         message: "user registered successfully !!",
-                                        id: userId,
+                                        id: id,
                                         name: input.name,
                                         phone: input.phone,
                                         email: input.email,
