@@ -12,7 +12,7 @@ var express = require('express'),
 
 router.post('/api/v1/signup', signup.doSignup);
 router.post('/api/v1/login', signup.doLogin);
-router.patch('/api/v1/pdadd/:id', pickdrop.addPickDrop);
+router.post('/api/v1/pdadd/:id', pickdrop.addPickDrop);
 router.get('/api/v1/pdadd', pickdrop.getPickDrop);
 router.get('/api/v1/pdadd/:id', pickdrop.getPickDropById);
 router.put('/api/v1/pdadd/:id', pickdrop.updatePickDrop);

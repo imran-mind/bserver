@@ -19,6 +19,18 @@ create database databasename
 
 create table signup(id TEXT ,name TEXT, phone TEXT, email TEXT,created_at bigint,updated_at bigint);
 
-create table pickdrop(id TEXT ,name TEXT, phone TEXT, from_add TEXT,to_add TEXT,
-from_time TEXT,to_time TEXT,id_everyday boolean,created_at bigint ,updated_at bigint );
+CREATE TABLE pickdrop(id  serial primary key ,
+                      name TEXT,
+                      phone TEXT,
+                      email TEXT,
+                      password  TEXT,
+                      image_path TEXT,
+                      from_add TEXT,
+                      to_add TEXT,
+                      from_time TEXT,
+                      to_time TEXT,
+                      is_everyday boolean,
+                      created_at bigint ,
+                      updated_at bigint
+ );
 

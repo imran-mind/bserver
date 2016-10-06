@@ -1,11 +1,11 @@
-
 var log = require('app/utils/logger')(module);
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('pickdrop', {
         id: {
-            type: DataTypes.TEXT,
+            type: DataTypes.INTEGER,
             field: 'id',
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         name: {
             type: DataTypes.TEXT,
