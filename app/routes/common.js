@@ -5,7 +5,8 @@
 var config = require('config'),
     AWS = require('aws-sdk');
 
-var debug = require('debug')('app.routes.common');
+var debug = require('debug')('app.routes.common'),
+    async = require('async')
 log = require('app/utils/logger')(module);
 
 var s3 = new AWS.S3({
@@ -41,32 +42,30 @@ function mapOrderByFields(order, type) {
             break;
     }
 }
-function generateQuery(object) {
+function generateQuery(type, data) {
     var query = {};
-    async.map(Object.keys(object), function (field) {
-        switch (field) {
-            case 'pick':
-                if (object[field].trim() !== '') {
-                    query.fromAdd = {$iLike: '%' + object[field].trim() + '%'};
-                }
-                break;
-            case 'drop':
-                if (object[field].trim() !== '') {
-                    query.toAdd = {$iLike: '%' + object[field].trim() + '%'};
-                }
-                break;
-            case 'ptime':
-                if (object[field].trim() !== '') {
-                    query.fromTime = object[field].trim();
-                }
-                break;
-            case 'dtime':
-                if (object[field].trim() !== '') {
-                    query.toTime = {$iLike: '%' + object[field].trim() + '%'};
-                }
-                break;
-        }
-    });
+    switch (type) {
+        case 'pick':
+            if (data) {
+                query.fromAdd = {$iLike: '%' + data.trim() + '%'};
+            }
+            break;
+        case 'drop':
+            if (data) {
+                query.toAdd = {$iLike: '%' + data.trim() + '%'};
+            }
+            break;
+        case 'ptime':
+            if (data) {
+                query.fromTime = {$iLike: '%' + data.trim() + '%'};
+            }
+            break;
+        case 'dtime':
+            if (data) {
+                query.toTime = {$iLike: '%' + data.trim() + '%'};
+            }
+            break;
+    }
     return query;
 }
 

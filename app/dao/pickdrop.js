@@ -11,9 +11,20 @@ var log = require('app/utils/logger')(module),
 
 var pickdrop = {
     getPickDrops: getPickDrops,
-    addPickDrop: addPickDrop
+    addPickDrop: addPickDrop,
+    getPickDropById: getPickDropById
 }
 
+function getPickDropById(condition, cb) {
+    MPickdrop
+        .find(condition)
+        .then(function (data) {
+            return cb(null, data);
+        }, function (error) {
+            log.error("==>error in getting getPickDropById  ", error.message);
+            return cb(error);
+        });
+}
 
 function addPickDrop(payload, condition, cb) {
     MPickdrop.update(payload, condition)
@@ -31,7 +42,7 @@ function getPickDrops(condition, cb) {
         .findAll(condition)
         .then(function (data) {
             if (data) {
-                return cb(null, data.dataValues);
+                return cb(null, data);
             }
         }, function (error) {
             log.error("error in getting pickdrop data ", error.message);

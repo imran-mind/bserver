@@ -1,11 +1,24 @@
 var debug = require('debug')('app.service.pickdrop'),
-    log = require('app/utils/logger')(module);
+    log = require('app/utils/logger')(module),
+    async = require('async');
 var pickdropDao = require('app/dao/pickdrop');
 
 var pickdrop = {
     getPickDrops: getPickDrops,
-    addPickDrop: addPickDrop
+    addPickDrop: addPickDrop,
+    getPickDropById: getPickDropById
 }
+
+function getPickDropById(condition, cb) {
+    pickdropDao.getPickDropById(condition, function (err, result) {
+        if (err) {
+            log.error("==>Error service/pickdrop-getPickDropById function ", err);
+            return cb(err);
+        }
+        cb(null, result);
+    });
+}
+
 
 function addPickDrop(input, id, cb) {
     var condition = {
@@ -34,13 +47,14 @@ function addPickDrop(input, id, cb) {
 
 
 function getPickDrops(condition, cb) {
-    var jsonUser = []
+    var jsonUser = [];
     pickdropDao.getPickDrops(condition, function (err, result) {
         if (err) {
             log.error("==>Error service/pickdrop-getPickDrops function ", err.message);
             return cb(err.message);
         }
-        if (result != null) {
+        var users = result;
+        if (users) {
             async.map(users, function (user) {
                 var userObje = {
                     "id": user.id,
@@ -58,6 +72,7 @@ function getPickDrops(condition, cb) {
             });
             return cb(null, jsonUser);
         }
+        return cb(null, null);
     });
 }
 
