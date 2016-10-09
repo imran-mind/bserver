@@ -6,8 +6,8 @@ var config = require('config'),
     AWS = require('aws-sdk');
 
 var debug = require('debug')('app.routes.common'),
-    async = require('async')
-log = require('app/utils/logger')(module);
+    async = require('async'),
+    log = require('app/utils/logger')(module);
 
 var s3 = new AWS.S3({
     Bucket: config.aws.bucket,
