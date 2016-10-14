@@ -9,9 +9,24 @@ var config = require('config'),
 
 var signup = {
     doSignup: doSignup,
-    doLogin: doLogin
+    doLogin: doLogin,
+    getComplaints: getComplaints
 }
-
+function getComplaints(req, res) {
+    var complaint = [
+        {
+            "comp_id": "1",
+            "item_name": "AC-Blue Star",
+            "customer_name": "Mr.Ritesh",
+        },
+        {
+            "comp_id": "2",
+            "item_name": "Fan-Khetan",
+            "customer_name": "Mr.Geet",
+        }
+    ]
+    return res.json(complaint);
+}
 function doSignup(req, res) {
     var input = req.body;
     log.info("==>invoking doSignup function");
