@@ -12,7 +12,7 @@ var express = require('express'),
 
 router.post('/api/v1/signup', signup.doSignup);
 router.post('/api/v1/login', signup.doLogin);
-router.put('/api/v1/pdadd/:id', pickdrop.addPickDrop);
+router.put('/api/v1/pdadd', pickdrop.addPickDrop);
 router.get('/api/v1/pdadd/search', pickdrop.getPickDrop);
 router.get('/api/v1/pdadd/:id', pickdrop.getPickDropById);
 router.get('/complaint', signup.getComplaints);

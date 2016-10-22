@@ -34,6 +34,7 @@ function doSignup(req, res) {
         "name": input.name,
         "phone": input.phone,
         "email": input.email,
+        "gender": input.gender,
         "password": input.password,
         "createdAt": moment().unix(),
         "updatedAt": moment().unix()

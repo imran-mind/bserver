@@ -25,6 +25,10 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.TEXT,
             field: 'image_path'
         },
+        gender: {
+            type: DataTypes.TEXT,
+            field: 'gender'
+        },
         password: {
             type: DataTypes.TEXT,
             field: 'password'

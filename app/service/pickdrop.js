@@ -27,6 +27,7 @@ function addPickDrop(input, id, cb) {
         }
     };
     var payload = {
+
         name: input.name,
         fromAdd: input.fromAdd,
         toAdd: input.toAdd,

@@ -18,7 +18,7 @@ var pickdrop = {
 
 function addPickDrop(req, res) {
     var input = req.body;
-    var id = req.params.id;
+    var id = input.id;
     pickdropService.addPickDrop(input, id, function (err, result) {
         if (err) {
             return res.status(500).json(err);
