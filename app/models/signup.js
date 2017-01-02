@@ -1,5 +1,3 @@
-
-
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('signup', {
         id: {
@@ -10,6 +8,10 @@ module.exports = function (sequelize, DataTypes) {
         name: {
             type: DataTypes.TEXT,
             field: 'name'
+        },
+        isMobileVisible: {
+            type: DataTypes.BOOLEAN,
+            field: 'is_mobile_visible'
         },
         phone: {
             type: DataTypes.TEXT,

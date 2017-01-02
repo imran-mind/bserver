@@ -9,24 +9,9 @@ var config = require('config'),
 
 var signup = {
     doSignup: doSignup,
-    doLogin: doLogin,
-    getComplaints: getComplaints
+    doLogin: doLogin
 }
-function getComplaints(req, res) {
-    var complaint = [
-        {
-            "comp_id": "1",
-            "item_name": "AC-Blue Star",
-            "customer_name": "Mr.Ritesh",
-        },
-        {
-            "comp_id": "2",
-            "item_name": "Fan-Khetan",
-            "customer_name": "Mr.Geet",
-        }
-    ]
-    return res.json(complaint);
-}
+
 function doSignup(req, res) {
     var input = req.body;
     log.info("==>invoking doSignup function");
@@ -36,6 +21,7 @@ function doSignup(req, res) {
         "email": input.email,
         "gender": input.gender,
         "password": input.password,
+        "isMobileVisible": input.isMobileVisible,
         "createdAt": moment().unix(),
         "updatedAt": moment().unix()
     }
@@ -54,7 +40,7 @@ function doSignup(req, res) {
                         var id = userSignup.id;
                         log.info("==>user registered !!")
                         /*var token = auth.createJWT(userSignup);*/
-                        common.getBucketUrl(input.phone, function (err, url) {
+                        common.getBucketUrl(input.phone, function (err, signedUrl, imageUrl) {
                             if (err) {
                                 log.error("==>Error in registering user", err)
                                 return res.status(500).json({
@@ -62,7 +48,7 @@ function doSignup(req, res) {
                                     status: 500
                                 });
                             }
-                            M.Pickdrop.update({imagePath: url}, condition)
+                            M.Pickdrop.update({imagePath: imageUrl}, condition)
                                 .then(function (result) {
                                     return res.status(201).json({
                                         status: 201,
@@ -71,8 +57,8 @@ function doSignup(req, res) {
                                         name: input.name,
                                         phone: input.phone,
                                         email: input.email,
-                                        imageUrl: url
-                                        /*token: token*/
+                                        signedUrl: signedUrl,
+                                        imageUrl: imageUrl
                                     });
                                 }, function (err) {
                                     log.error('error in dao delete driver', err);
@@ -100,8 +86,7 @@ function doLogin(req, res) {
     M.Pickdrop
         .findOne({
             where: {email: email, password: password}
-        })
-        .then(function (user) {
+        }).then(function (user) {
             if (user != null) {
                 var jsonUser = {
                     "id": user.id,
